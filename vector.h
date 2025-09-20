@@ -31,7 +31,7 @@ public:
     CVector(CVector &&v) noexcept;
 
     // TODO: (Nivel 1) implementar el destructor de forma segura
-    virtual ~CVector();
+    ~CVector();
     void insert(T &elem);
     void resize();
 
@@ -58,7 +58,6 @@ CVector<T>::~CVector(){
     Destroy();
 }
 
-
 template <typename T>
 CVector<T>::CVector(size_t n)
 {
@@ -79,25 +78,23 @@ void CVector<T>::Destroy(){
     m_pVect = nullptr;
 }
 
-// Move constructor - IMPLEMENTACIÓN (Nivel 2)
 template <typename T>
 CVector<T>::CVector(CVector &&v) noexcept 
-    : m_pVect(v.m_pVect),   // mover puntero del otro objeto
-      m_count(v.m_count),   // copiar contador de elementos
-      m_max(v.m_max) {      // copiar capacidad máxima   
+    : m_pVect(v.m_pVect),   
+      m_count(v.m_count),   
+      m_max(v.m_max) {      
     
-    // Vaciar el objeto fuente manteniéndolo válido
-    v.m_pVect = nullptr;    // dejar fuente sin puntero
-    v.m_count = 0;         // dejar fuente sin elementos
-    v.m_max = 0;          // dejar fuente sin capacidad
+    v.m_pVect = nullptr;    
+    v.m_count = 0;         
+    v.m_max = 0;         
 }
 
 // TODO (Nivel 1): hacer dinamico el delta de crecimiento
 template <typename T>
 void CVector<T>::resize(){
-    size_t delta = m_max * factor;
+    size_t delta = m_max <= 0 ? 1:m_max * factor;
     T *pTmp = new T[m_max + delta];
-    for(auto i=0; i < m_max ; ++i)
+    for(size_t i=0; i < m_max ; ++i)
         pTmp[i] = m_pVect[i];
     delete [] m_pVect;
     m_max += delta;
